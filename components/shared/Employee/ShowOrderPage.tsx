@@ -17,8 +17,14 @@ import useSWR from "swr";
 import { Document } from "@/types";
 import { useEffect, useState } from "react";
 
+// Define a type for the user data
+interface ParsedUserData {
+  _id: string;
+  [key: string]: any; // Adjust based on the actual structure of user data
+}
+
 export function ShowOrderPage() {
-  const [parsedUserData, setParsedUserData] = useState<any>(null);
+  const [parsedUserData, setParsedUserData] = useState<ParsedUserData | null>(null);
 
   useEffect(() => {
     // Only run on the client side
