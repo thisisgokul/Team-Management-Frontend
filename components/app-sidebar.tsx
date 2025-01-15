@@ -19,64 +19,44 @@ import {
 
 export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
   const [role, setRole] = React.useState<string | null>(null);
-  const storedUserData = localStorage.getItem("userData");
-  const parsedUserData = storedUserData ? JSON.parse(storedUserData) : null;
+  const [parsedUserData, setParsedUserData] = React.useState<{ fullName?: string } | null>(null);
 
   React.useEffect(() => {
-    const userRoleCookie = getCookie("role"); // Fetches the value of the 'role' cookie
-    setRole(userRoleCookie); // Sets the role state with the cookie value
+    const storedUserData = localStorage.getItem("userData");
+    setParsedUserData(storedUserData ? JSON.parse(storedUserData) : null);
+
+    function getCookie(name: string) {
+      if (typeof document === "undefined") return null; // Prevent SSR issues
+      const cookieArr = document.cookie.split(";");
+      for (let cookie of cookieArr) {
+        let trimmedCookie = cookie.trim();
+        if (trimmedCookie.startsWith(name + "=")) {
+          return trimmedCookie.substring(name.length + 1);
+        }
+      }
+      return null;
+    }
+
+    setRole(getCookie("role"));
   }, []);
 
-  // Helper function to get a specific cookie by name
-  function getCookie(name: string) {
-    const cookieArr = document.cookie.split(";"); // Split cookies into an array of strings
-    for (let i = 0; i < cookieArr.length; i++) {
-      let cookie = cookieArr[i].trim(); 
-      if (cookie.startsWith(name + "=")) {
-        return cookie.substring(name.length + 1); // Get the value of the cookie
-      }
-    }
-    return null; // Return null if the cookie is not found
-  }
-
-  // Determine routes based on role
   const navMain = getNavMainByRole(role);
 
   function getNavMainByRole(role: string | null) {
     if (role === "Admin") {
       return [
-        {
-          title: "Team Mates",
-          url: "/dashboard/admin/users",
-        },
-        {
-          title: "Products",
-          url: "/dashboard/admin/products",
-        },
-        
+        { title: "Team Mates", url: "/dashboard/admin/users" },
+        { title: "Products", url: "/dashboard/admin/products" },
       ];
     } else if (role === "Employee") {
       return [
-        {
-          title: "My Orders",
-          url: "/dashboard/employee/tasks",
-        },
-        {
-          title: "Place Order",
-          url: "/dashboard/employee/all-products",
-        },
-        
+        { title: "My Orders", url: "/dashboard/employee/tasks" },
+        { title: "Place Order", url: "/dashboard/employee/all-products" },
       ];
     } else if (role === "Manager") {
-      return [
-        {
-          title: "Manage Orders",
-          url: "/dashboard/manager",
-        },
-        
-      ];
+      return [{ title: "Manage Orders", url: "/dashboard/manager" }];
     } else {
-      return []; // Return empty if the role is not found
+      return [];
     }
   }
 
@@ -90,7 +70,7 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
       {
         name: "Welcome",
         logo: GalleryVerticalEnd,
-        plan: parsedUserData?.fullName,
+        plan: parsedUserData?.fullName || "Guest",
       },
     ],
     navMain: [
@@ -99,7 +79,7 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
         url: "#",
         icon: SquareTerminal,
         isActive: true,
-        items: navMain, // Dynamically generated items based on role
+        items: navMain,
       },
     ],
   };
