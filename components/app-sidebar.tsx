@@ -28,14 +28,15 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
     function getCookie(name: string) {
       if (typeof document === "undefined") return null; // Prevent SSR issues
       const cookieArr = document.cookie.split(";");
-      for (let cookie of cookieArr) {
-        let trimmedCookie = cookie.trim();
+      for (const cookie of cookieArr) { // Use 'const' instead of 'let'
+        const trimmedCookie = cookie.trim(); // Use 'const' instead of 'let'
         if (trimmedCookie.startsWith(name + "=")) {
           return trimmedCookie.substring(name.length + 1);
         }
       }
       return null;
     }
+    
 
     setRole(getCookie("role"));
   }, []);
