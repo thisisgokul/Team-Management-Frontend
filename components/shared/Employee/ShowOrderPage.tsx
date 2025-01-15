@@ -15,22 +15,28 @@ import { Loader } from "@/utils/constants";
 import { fetcher } from "@/utils/fetcher";
 import useSWR from "swr";
 import { Document } from "@/types";
-
-
+import { useEffect, useState } from "react";
 
 export function ShowOrderPage() {
-        const userData = localStorage.getItem("userData");
+  const [parsedUserData, setParsedUserData] = useState<any>(null);
 
-    const parsedUserData = userData ? JSON.parse(userData) : null;
-    
-    
+  useEffect(() => {
+    // Only run on the client side
+    if (typeof window !== "undefined") {
+      const userData = localStorage.getItem("userData");
+      const parsed = userData ? JSON.parse(userData) : null;
+      setParsedUserData(parsed);
+    }
+  }, []); // Empty dependency array ensures it runs once when the component mounts
+
+  // Ensure parsedUserData is available before making the API request
   const { data: products, isLoading } = useSWR<Document[]>(
-    `/get-specific-products?userId=${parsedUserData._id}`,
+    parsedUserData ? `/get-specific-products?userId=${parsedUserData._id}` : null,
     fetcher
   );
 
   // Show loader while fetching data
-  if (isLoading) return <Loader/>;
+  if (isLoading) return <Loader />;
 
   // Show message if no products exist
   if (!products || products.length === 0)
@@ -39,8 +45,6 @@ export function ShowOrderPage() {
         <p className="text-gray-600">No products found.</p>
       </div>
     );
-
-   
 
   return (
     <Table>
@@ -70,15 +74,13 @@ export function ShowOrderPage() {
             <TableCell className="font-medium">{product.customerName}</TableCell>
             <TableCell className="font-medium">{product.productName}</TableCell>
             <TableCell>{product.productDescription}</TableCell>
-            
             <TableCell className="text-right">${product.productPrice.toFixed(2)}</TableCell>
             <TableCell className="text-right space-x-2">
-            {product.orderStatus}    
-             </TableCell>
+              {product.orderStatus}
+            </TableCell>
           </TableRow>
         ))}
       </TableBody>
-     
     </Table>
   );
 }
