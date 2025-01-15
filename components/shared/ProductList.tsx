@@ -59,9 +59,9 @@ export function ProductList() {
   
       toast.success("Product deleted successfully!", { id: toastId }); // Replace loading with success
       mutate("/get-all-product"); // Refetch product list
-    } catch (error: any) {
+    } catch (error) {
       console.error("Error deleting product:", error);
-      toast.error(error.response?.data?.message || "Failed to delete product."); // Replace loading with error
+      toast.error("Failed to delete product."); // Replace loading with error
     }
   };
   
