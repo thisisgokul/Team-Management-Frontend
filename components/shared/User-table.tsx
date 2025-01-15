@@ -49,9 +49,9 @@ export function UserTable() {
 
       toast.success("User deleted successfully!");
       mutate("/get-all-users"); // Refetch user list
-    } catch (error: any) {
+    } catch (error) {
       console.error("Error deleting user:", error);
-      toast.error(error.response?.data?.message || "Failed to delete user.");
+      toast.error("Failed to delete user.");
     }
   };
 

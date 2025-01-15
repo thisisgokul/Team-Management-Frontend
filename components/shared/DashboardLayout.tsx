@@ -37,7 +37,7 @@ const DashboardLayout: React.FC<DashboardLayoutProps> = ({ children }) => {
               <BreadcrumbList>
                 <BreadcrumbItem className="hidden md:block">
                   <BreadcrumbLink href="#">
-                    Hi ' Welcome
+                  {`Hi ' Welcome`}
                   </BreadcrumbLink>
                 </BreadcrumbItem>
                 <BreadcrumbSeparator className="hidden md:block" />

@@ -5,17 +5,16 @@ import {
   TableBody,
   TableCaption,
   TableCell,
-  TableFooter,
+ 
   TableHead,
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
 import Image from "next/image";
-import { Button } from "@/components/ui/button";
 
 import { Loader } from "@/utils/constants";
 import { fetcher } from "@/utils/fetcher";
-import useSWR, { mutate } from "swr";
+import useSWR from "swr";
 import { Product } from "@/types";
 import { OrderStatusDialog } from "@/components/helpers/OrderStatusDialog";
 
