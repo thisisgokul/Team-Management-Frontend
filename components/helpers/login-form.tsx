@@ -49,7 +49,7 @@ export function LoginForm({
         alert("Role not recognized, redirecting to default dashboard.");
         router.push("/dashboard"); // Default route for unknown roles (you can adjust as needed)
       }
-    } catch (err: any) {
+    } catch (err: unknown) {
       setError("Login failed. Please check your credentials and try again.");
       console.error("Login error:", err);
     } finally {
