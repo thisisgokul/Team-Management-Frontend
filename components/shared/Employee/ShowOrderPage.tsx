@@ -20,9 +20,10 @@ import { useEffect, useState } from "react";
 // Define a type for the user data
 interface UserData {
   _id: string;
-  name: string;
+  fullName: string;
   email: string;
-  avatar: string;
+  password?:String
+  role: string;
 }
 export function ShowOrderPage() {
   const [parsedUserData, setParsedUserData] = useState<UserData | null>(null);
