@@ -28,6 +28,12 @@ import { toast } from "sonner";
 import axiosInstance from "@/utils/axiosInstance";
 import { useRouter } from "next/navigation";
 
+// Define an interface for the user data
+interface UserData {
+  fullName: string;
+  email: string;
+}
+
 export function NavUser({
   user,
 }: {
@@ -38,7 +44,7 @@ export function NavUser({
   };
 }) {
   const { isMobile } = useSidebar();
-  const [parsedUserData, setParsedUserData] = useState<any>(null);
+  const [parsedUserData, setParsedUserData] = useState<UserData | null>(null); // Use the UserData interface here
   const router = useRouter();
 
   useEffect(() => {

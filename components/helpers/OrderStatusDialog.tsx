@@ -15,6 +15,13 @@ import { Product } from "@/types";
 import axiosInstance from "@/utils/axiosInstance";
 import { toast } from "sonner";
 
+// Define UserData interface
+interface UserData {
+  _id: string;
+  fullName: string;
+  email: string;
+}
+
 interface OrderStatusDialogProps {
   product: Product;
 }
@@ -22,7 +29,7 @@ interface OrderStatusDialogProps {
 export function OrderStatusDialog({ product }: OrderStatusDialogProps) {
   const [customerName, setCustomerName] = React.useState("");
   const [orderStatus, setOrderStatus] = React.useState("Pending");
-  const [userData, setUserData] = React.useState<any>(null);
+  const [userData, setUserData] = React.useState<UserData | null>(null);
 
   // Fetch user data from localStorage when the component mounts
   React.useEffect(() => {
