@@ -18,15 +18,9 @@ import { Document } from "@/types";
 import { useEffect, useState } from "react";
 
 // Define a type for the user data
-interface UserData {
-  _id: string;
-  fullName: string;
-  email: string;
-  password?:String
-  role: string;
-}
+
 export function ShowOrderPage() {
-  const [parsedUserData, setParsedUserData] = useState<UserData | null>(null);
+  const [parsedUserData, setParsedUserData] = useState(null);
 
   useEffect(() => {
     // Only run on the client side
