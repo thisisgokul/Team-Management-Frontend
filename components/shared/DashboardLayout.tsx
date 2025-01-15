@@ -1,6 +1,6 @@
-"use client"
-import React, { ReactNode } from 'react'
-import { AppSidebar } from "@/components/app-sidebar"
+"use client";
+import React, { ReactNode, useEffect, useState } from "react";
+import { AppSidebar } from "@/components/app-sidebar";
 
 import {
   Breadcrumb,
@@ -9,22 +9,29 @@ import {
   BreadcrumbList,
   BreadcrumbPage,
   BreadcrumbSeparator,
-} from "@/components/ui/breadcrumb"
+} from "@/components/ui/breadcrumb";
 
-import { Separator } from "@/components/ui/separator"
+import { Separator } from "@/components/ui/separator";
 import {
   SidebarInset,
   SidebarProvider,
   SidebarTrigger,
-} from "@/components/ui/sidebar"
+} from "@/components/ui/sidebar";
 
 interface DashboardLayoutProps {
   children: ReactNode;
 }
 
 const DashboardLayout: React.FC<DashboardLayoutProps> = ({ children }) => {
-  const storedUserData = localStorage.getItem("userData");
-  const parsedUserData = storedUserData ? JSON.parse(storedUserData) : null;
+  const [parsedUserData, setParsedUserData] = useState<{ role?: string } | null>(null);
+
+  useEffect(() => {
+    if (typeof window !== "undefined") {
+      const storedUserData = localStorage.getItem("userData");
+      setParsedUserData(storedUserData ? JSON.parse(storedUserData) : null);
+    }
+  }, []);
+
   return (
     <SidebarProvider>
       <AppSidebar />
@@ -36,14 +43,12 @@ const DashboardLayout: React.FC<DashboardLayoutProps> = ({ children }) => {
             <Breadcrumb>
               <BreadcrumbList>
                 <BreadcrumbItem className="hidden md:block">
-                  <BreadcrumbLink href="#">
-                  {`Hi ' Welcome`}
-                  </BreadcrumbLink>
+                  <BreadcrumbLink href="#">Hi &apos; Welcome</BreadcrumbLink>
                 </BreadcrumbItem>
                 <BreadcrumbSeparator className="hidden md:block" />
                 <BreadcrumbItem>
-                  <BreadcrumbPage>{parsedUserData?.role}</BreadcrumbPage>
-                </BreadcrumbItem> 
+                  <BreadcrumbPage>{parsedUserData?.role || "Guest"}</BreadcrumbPage>
+                </BreadcrumbItem>
               </BreadcrumbList>
             </Breadcrumb>
           </div>
