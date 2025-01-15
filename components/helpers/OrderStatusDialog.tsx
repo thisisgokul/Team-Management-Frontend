@@ -1,14 +1,14 @@
 "use client";
 
 import * as React from "react";
-import {  
-  AlertDialog, AlertDialogAction, AlertDialogCancel, AlertDialogContent, 
-  AlertDialogDescription, AlertDialogFooter, AlertDialogHeader, 
+import {
+  AlertDialog, AlertDialogAction, AlertDialogCancel, AlertDialogContent,
+  AlertDialogDescription, AlertDialogFooter, AlertDialogHeader,
   AlertDialogTitle, AlertDialogTrigger, Button, Input
 } from "./UiImports";
 import { Label } from "@/components/ui/label";
 import {
-  Select,SelectContent,SelectItem,SelectTrigger,SelectValue,
+  Select, SelectContent, SelectItem, SelectTrigger, SelectValue,
 } from "@/components/ui/select";
 
 import { Product } from "@/types";
@@ -16,41 +16,48 @@ import axiosInstance from "@/utils/axiosInstance";
 import { toast } from "sonner";
 
 interface OrderStatusDialogProps {
-  product: Product; 
+  product: Product;
 }
 
-
-export function OrderStatusDialog({product}:OrderStatusDialogProps) {
+export function OrderStatusDialog({ product }: OrderStatusDialogProps) {
   const [customerName, setCustomerName] = React.useState("");
   const [orderStatus, setOrderStatus] = React.useState("Pending");
-  ;
+  const [userData, setUserData] = React.useState<any>(null);
+
+  // Fetch user data from localStorage when the component mounts
+  React.useEffect(() => {
+    const storedUserData = localStorage.getItem("userData");
+    if (storedUserData) {
+      setUserData(JSON.parse(storedUserData));
+    } else {
+      console.error("Employee data not found");
+    }
+  }, []);
 
   const handleSubmit = async () => {
-    const storedUserData = localStorage.getItem("userData");
-    const parsedUserData = storedUserData ? JSON.parse(storedUserData) : null;
-  
-    if (!parsedUserData) {
-      console.error("Employee data not found");
+    if (!userData) {
+      console.error("User data is not available");
       return;
     }
-  
+
     const orderData = {
       customerName,
       orderStatus,
       productId: product._id,
       productName: product.name,
       productPrice: product.price,
-      productImage: product.image, 
+      productImage: product.image,
       productDescription: product.description,
-      employeeId: parsedUserData._id,
-      employeeName: parsedUserData.fullName,
-      employeeEmail: parsedUserData.email,
+      employeeId: userData._id,
+      employeeName: userData.fullName,
+      employeeEmail: userData.email,
     };
+
     const toastId = toast.loading("Ordering...");
     try {
-      await axiosInstance.post("/place-order", orderData,{withCredentials:true});
-      toast.success("Order placed successfully! 🎉",{id:toastId});
-      setCustomerName("")
+      await axiosInstance.post("/place-order", orderData, { withCredentials: true });
+      toast.success("Order placed successfully! 🎉", { id: toastId });
+      setCustomerName(""); // Clear customer name input
     } catch (error) {
       console.error("Error placing order:", error);
     }
@@ -60,7 +67,7 @@ export function OrderStatusDialog({product}:OrderStatusDialogProps) {
     <AlertDialog>
       <AlertDialogTrigger asChild>
         <Button variant="outline" size="sm" className="text-emerald-600">
-          place order
+          Place order
         </Button>
       </AlertDialogTrigger>
       <AlertDialogContent>

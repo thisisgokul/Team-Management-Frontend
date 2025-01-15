@@ -1,57 +1,61 @@
-"use client"
+"use client";
 
+import { useState, useEffect } from "react"; // Import useState and useEffect hooks
 import {
   ChevronsUpDown,
- 
   LogOut,
-} from "lucide-react"
-
+} from "lucide-react";
 import {
   Avatar,
   AvatarFallback,
   AvatarImage,
-} from "@/components/ui/avatar"
+} from "@/components/ui/avatar";
 import {
   DropdownMenu,
   DropdownMenuContent,
-  
   DropdownMenuItem,
   DropdownMenuLabel,
   DropdownMenuSeparator,
   DropdownMenuTrigger,
-} from "@/components/ui/dropdown-menu"
+} from "@/components/ui/dropdown-menu";
 import {
   SidebarMenu,
   SidebarMenuButton,
   SidebarMenuItem,
   useSidebar,
-} from "@/components/ui/sidebar"
-import { toast } from "sonner"
-import axiosInstance from "@/utils/axiosInstance"
-import { useRouter } from "next/navigation"
+} from "@/components/ui/sidebar";
+import { toast } from "sonner";
+import axiosInstance from "@/utils/axiosInstance";
+import { useRouter } from "next/navigation";
 
 export function NavUser({
   user,
 }: {
   user: {
-    name: string
-    email: string
-    avatar: string
-  }
-
-  
+    name: string;
+    email: string;
+    avatar: string;
+  };
 }) {
-  const { isMobile } = useSidebar()
-  const storedUserData = localStorage.getItem("userData");
-  const parsedUserData = storedUserData ? JSON.parse(storedUserData) : null;
-const router = useRouter();
-  
+  const { isMobile } = useSidebar();
+  const [parsedUserData, setParsedUserData] = useState<any>(null);
+  const router = useRouter();
+
+  useEffect(() => {
+    // Ensure this code only runs on the client side
+    if (typeof window !== "undefined") {
+      const storedUserData = localStorage.getItem("userData");
+      const parsed = storedUserData ? JSON.parse(storedUserData) : null;
+      setParsedUserData(parsed);
+    }
+  }, []); // Empty dependency array to run only once when the component mounts
+
   const logout = async () => {
     try {
       const toastId = toast.loading("Logging out...");
 
-      // Call API to handle logout 
-      await axiosInstance.get("/logout"); 
+      // Call API to handle logout
+      await axiosInstance.get("/logout");
 
       // Clear local storage
       localStorage.clear();
@@ -65,6 +69,8 @@ const router = useRouter();
       toast.error("Logout failed! Please try again.");
     }
   };
+
+  if (!parsedUserData) return null; // Prevent rendering if user data is not available
 
   return (
     <SidebarMenu>
@@ -105,7 +111,6 @@ const router = useRouter();
               </div>
             </DropdownMenuLabel>
             <DropdownMenuSeparator />
-   
             <DropdownMenuItem>
               <LogOut />
               <span onClick={logout}>Log out</span>
@@ -114,5 +119,5 @@ const router = useRouter();
         </DropdownMenu>
       </SidebarMenuItem>
     </SidebarMenu>
-  )
+  );
 }
