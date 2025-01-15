@@ -1,19 +1,9 @@
-import { ColorRing } from 'react-loader-spinner'
+import React from "react";
 
  // Reusable Loader Component
  export const Loader = () => (
-  <div className="flex justify-center items-center">
-    loading..
-  <ColorRing
-    visible={true}
-    height="50"
-    width="50"
-    ariaLabel="color-ring-loading"
-    wrapperStyle={{}}
-    wrapperClass="color-ring-wrapper"
-    colors={['#000000', '#808080', '#000000', '#808080', '#000000']} // Alternating black and gray
-  />
-</div>
-
+  <div className="flex justify-center items-center h-64">
+    <div className="w-10 h-10 border-4 border-gray-600 border-t-gray-800 rounded-full animate-spin-custom"></div>
+  </div>
 );
 
