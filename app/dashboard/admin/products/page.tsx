@@ -1,3 +1,4 @@
+"use client"
 import  ProductAddForm  from '@/components/helpers/ProductAddForm'
 import DashboardLayout from '@/components/shared/DashboardLayout'
 import { ProductList } from '@/components/shared/ProductList'
